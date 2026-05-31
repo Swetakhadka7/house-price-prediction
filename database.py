@@ -1,11 +1,16 @@
 import psycopg2
 from datetime import datetime
 
+import os
+from dotenv import load_dotenv
+
+load_dotenv()
+
 DB_CONFIG = {
     'host': 'localhost',
     'database': 'house_predictions',
     'user': 'postgres',
-    'password': 'admin',
+    'password': os.getenv('DB_PASSWORD'),
     'port': '5432'
 }
 
