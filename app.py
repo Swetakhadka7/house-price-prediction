@@ -1,19 +1,17 @@
+from database import save_prediction
 import streamlit as st
 import pandas as pd
 import numpy as np
 import joblib
 
-# Load the saved model, scaler, feature names and feature means
 model = joblib.load('model.pkl')
 scaler = joblib.load('scaler.pkl')
 feature_names = joblib.load('feature_names.pkl')
 feature_means = joblib.load('feature_means.pkl')
 
-# App title
 st.title('House Price Prediction')
 st.write('Enter the details of the house to get an estimated sale price.')
 
-# Sidebar inputs
 st.sidebar.header('Enter House Details')
 
 OverallQual = st.sidebar.slider('Overall Quality (1-10)', 1, 10, 5)
@@ -26,10 +24,8 @@ YearRemodAdd = st.sidebar.number_input('Year Remodeled', 1950, 2010, 1990)
 TotRmsAbvGrd = st.sidebar.slider('Total Rooms Above Ground', 1, 14, 6)
 Fireplaces = st.sidebar.slider('Number of Fireplaces', 0, 3, 1)
 
-# Start with average values for all 83 features
 input_data = pd.DataFrame([feature_means], columns=feature_names)
 
-# Override with user inputs
 input_data['OverallQual'] = OverallQual
 input_data['GrLivArea'] = GrLivArea
 input_data['GarageCars'] = GarageCars
@@ -40,10 +36,8 @@ input_data['YearRemodAdd'] = YearRemodAdd
 input_data['TotRmsAbvGrd'] = TotRmsAbvGrd
 input_data['Fireplaces'] = Fireplaces
 
-# Scale the input data
 input_scaled = scaler.transform(input_data)
 
-# Predict button
 # Predict button
 if st.sidebar.button('Predict Price'):
     prediction = model.predict(input_scaled)
@@ -61,3 +55,24 @@ if st.sidebar.button('Predict Price'):
                   FullBath, YearBuilt, YearRemodAdd, TotRmsAbvGrd, Fireplaces]
     })
     st.table(summary)
+
+    inputs = {
+        'OverallQual': OverallQual,
+        'GrLivArea': GrLivArea,
+        'GarageCars': GarageCars,
+        'TotalBsmtSF': TotalBsmtSF,
+        'FullBath': FullBath,
+        'YearBuilt': YearBuilt,
+        'YearRemodAdd': YearRemodAdd,
+        'TotRmsAbvGrd': TotRmsAbvGrd,
+        'Fireplaces': Fireplaces
+    }
+    try:
+        save_prediction(inputs, predicted_price)
+        st.info('Prediction saved to database')
+    except Exception as e:
+        st.error(f'Database error: {e}')
+    
+    
+    
+
