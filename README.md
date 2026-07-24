@@ -44,6 +44,9 @@ Dataset link: https://www.kaggle.com/competitions/house-prices-advanced-regressi
 ---
 
 ## Project Structure
+
+```
+
 DS Certification Task/
 │
 ├── house_price_prediction.ipynb   # Main Jupyter Notebook
@@ -55,6 +58,8 @@ DS Certification Task/
 ├── feature_names.pkl              # Saved feature names
 ├── feature_means.pkl              # Saved feature means
 └── README.md                      # Project documentation
+
+```
 
 ---
 
